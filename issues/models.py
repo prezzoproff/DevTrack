@@ -18,7 +18,7 @@ class Issues(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     priority = models.CharField(max_length=20, choices=priority_choices, default='medium')
-    status = models.CharField(max_length=20, choices=status_choices, default=open)
+    status = models.CharField(max_length=20, choices=status_choices, default= 'open')
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
 
