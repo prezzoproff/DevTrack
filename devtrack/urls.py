@@ -27,5 +27,5 @@ urlpatterns = [
 
 # Add URL maps to redirect the base URL to our application
 urlpatterns += [
-    path("",RedirectView.as_view(url= 'issues/', permanent = True))
+    path("",RedirectView.as_view(url= 'users/', permanent = True))
 ]
