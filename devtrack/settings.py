@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     #custom apps
     'issues',
+    'django_ai_assistant',
 ]
 
 MIDDLEWARE = [
