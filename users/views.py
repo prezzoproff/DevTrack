@@ -1,3 +1,5 @@
+import qrcode
+import pyotp
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -10,6 +12,11 @@ import random
 from .forms import ProfileUpdateForm, TwoFactorForm
 from .models import UserProfile
 from django.conf import settings
+from io import BytesIO
+import base64
+import io
+
+
 
 
 
@@ -100,8 +107,26 @@ def verify_otp(request):
 
     return render(request, "verify_otp.html", {"form": form})
 
+@login_required
 def enable_2fa(request):
-    return render(request, 'users/enable_2fa.html') 
+    user = request.user
+
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    
+    if not profile.otp_secret:
+        profile.otp_secret = pyotp.random_base32()
+        profile.save()
+
+    totp = pyotp.TOTP(profile.otp_secret)
+    otp_url = totp.provisioning_uri(user.username, issuer_name="My Django App")
+
+    # Generate QR code
+    qr = qrcode.make(otp_url)
+    qr_io = io.BytesIO()
+    qr.save(qr_io, format="PNG")
+    qr_base64 = base64.b64encode(qr_io.getvalue()).decode()
+
+    return render(request, "users/enable_2fa.html", {"qr_base64": qr_base64})
 
 
 

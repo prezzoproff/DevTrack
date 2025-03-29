@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Enable Two-Factor Authentication (2FA)</h2>
+    <p>Scan the QR code below with your authentication app (Google Authenticator, Authy, etc.).</p>
+
+    {% if qr_code %}
+    <p>Scan this QR code in Google Authenticator:</p>
+    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+{% else %}
+    <p>No QR code generated.</p>
+{% endif %}
+
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="otp">Enter the code from your authenticator app:</label>
+        <input type="text" name="otp" required>
+        <button type="submit">Verify & Enable</button>
+    </form>
+</div>
+{% endblock %}

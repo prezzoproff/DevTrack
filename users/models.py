@@ -11,6 +11,8 @@ class UserProfile(models.Model):
     bio = models.TextField(blank = True, null = True) #Optional Bio field
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add = True) #Automatically stores registration date
+    two_factor_secret = models.CharField(max_length=32, blank=True, null=True)
+    otp_secret = models.CharField(max_length=32, blank=True, null=True)
 
 
     def __str__(self):
