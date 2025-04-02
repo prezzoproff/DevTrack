@@ -19,3 +19,9 @@ class ProfileUpdateForm(forms.ModelForm):
 
 class TwoFactorForm(forms.Form):
     otp = forms.CharField(label="Enter OTP", max_length=6, required=True)
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'bio']
