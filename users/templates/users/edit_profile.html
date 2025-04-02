@@ -1,25 +1,9 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
     <h2>Edit Profile</h2>
-
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- This will render the form fields -->
-
-        <div class="input-group">
-            <label for="profile_picture">Profile Picture</label>
-            <input type="file" name="profile_picture" accept="image/*">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Profile</button>
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
     </form>
-
-    <hr>
-    <h3>Current Profile Picture:</h3>
-    {% if profile.profile_picture %}
-        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150">
-    {% else %}
-        <p>No profile picture uploaded</p>
-    {% endif %}
 {% endblock %}

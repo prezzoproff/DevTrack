@@ -5,49 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Load the static tag -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}"> <!-- Link to external CSS file -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            transition: background 0.3s, color 0.3s;
-        }
-        .scroll-text {
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            font-weight: bold;
-            color: #007bff;
-            animation: scroll 15s linear infinite;
-        }
-        @keyframes scroll {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
-        }
-        .card {
-            max-width: 500px;
-            margin: auto;
-        }
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 10px auto;
-            display: block;
-            border: 3px solid #007bff;
-        }
-        .dark-mode {
-            background-color: #121212;
-            color: white;
-        }
-        .dark-mode .card {
-            background-color: #1e1e1e;
-            color: white;
-        }
-        .dark-mode .list-group-item {
-            background-color: #2a2a2a;
-            color: white;
-        }
-    </style>
 </head>
 <body class="bg-light">
     <div class="scroll-text text-center">🚀 Welcome to DevTrack! 🚀</div>
@@ -58,7 +19,8 @@
                 <h3>Welcome, {{ user.username }}</h3>
             </div>
             <div class="card-body">
-                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+                <img src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'images/default_profile_picture.png' %}{% endif %}" alt="Profile Picture" class="profile-img">
+
                 <h5 class="card-title mt-2">{{ user.userprofile.name }}</h5>
                 <p class="text-muted">@{{ user.username }}</p>
 
@@ -96,7 +58,6 @@
         <div class="mt-4 text-center">
             <button onclick="toggleDarkMode()" class="btn btn-secondary">Toggle Dark Mode</button>
         </div>
-        
 
         <div class="mt-5">
             <h4>Recent Activity</h4>
