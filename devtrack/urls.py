@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('issues/', include('issues.urls')),
     path('users/', include('users.urls'))
+    
 ]
 
 # Add URL maps to redirect the base URL to our application
