@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add = True) #Automatically stores registration date
     two_factor_secret = models.CharField(max_length=32, blank=True, null=True)
     otp_secret = models.CharField(max_length=32, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)  # Store profile picture
 
 
     def __str__(self):

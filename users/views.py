@@ -36,23 +36,15 @@ def register(request):
 
 
 def login_view(request):
-    form = AuthenticationForm()  # Create an instance of AuthenticationForm
+    form = AuthenticationForm(request, data=request.POST) if request.method == 'POST' else AuthenticationForm()
 
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)  # Bind data to form
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.method == 'POST' and form.is_valid():
+        user = form.get_user()  # Get authenticated user
+        login(request, user)
+        messages.success(request, f"Welcome {user.username}! You are now logged in.")
+        return redirect('profile')  # Ensure 'profile' exists in urls.py
 
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, f"Welcome {username}! You are now logged in.")
-            return redirect('profile')  # Redirects to the profile page
-        else:
-            messages.error(request, 'Invalid Username or Password')
-
-    return render(request, 'users/login.html', {'form': form})  # Pass form to template
+    return render(request, 'users/login.html', {'form': form}) 
 
 def logout_view(request):
     logout(request) #Ends user session
@@ -65,16 +57,25 @@ def profile_view(request):
 
 @login_required
 def edit_profile(request):
-    if request.method == "POST":
-        form = ProfileUpdateForm(request.POST, instance=request.user.profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Your profile has been updated!")
-            return redirect("edit_profile")
-    else:
-        form = ProfileUpdateForm(instance=request.user.profile)
+    # Get the current user's profile
+    profile = request.user.profile
 
-    return render(request, "edit_profile.html", {"form": form})
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
+
+        # If form is valid, save the changes
+        if form.is_valid():
+            form.save()  # Save the user data
+            if 'profile_picture' in request.FILES:  # Update profile picture if provided
+                profile.profile_picture = request.FILES['profile_picture']
+                profile.save()
+            
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')  # Redirect to the profile page after successful update
+    else:
+        form = ProfileForm(instance=request.user)  # Pre-fill the form with current user data
+
+    return render(request, 'users/edit_profile.html', {'form': form, 'profile': profile})
 
 
 @login_required
