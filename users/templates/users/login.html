@@ -1,12 +1,47 @@
-<form method = "POST">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Login</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
 
-{% if messages %}
-{% for message in messages %}
-<p>{{ message }}</p>
-{% endfor %}
-{% endif %}
+    <!-- Load Static Files -->
+    {% load static %}
+
+    <!-- Link to Login-Specific CSS -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="login-container">
+    <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <label for="username"><i class="fas fa-user"></i> Username</label>
+            {{ form.username }}
+        </div>
+
+        <div class="input-group">
+            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            {{ form.password }}
+        </div>
+
+        <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+
+    <p class="register-link">
+        Don't have an account? 
+        <a href="{% url 'register' %}">
+            <i class="fas fa-user-plus"></i> Register Here
+        </a>
+    </p>
+</div>
+
+</body>
+</html>

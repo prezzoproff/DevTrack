@@ -1,5 +1,6 @@
 import qrcode
 import pyotp
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -35,20 +36,23 @@ def register(request):
 
 
 def login_view(request):
+    form = AuthenticationForm()  # Create an instance of AuthenticationForm
+
     if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)  # Bind data to form
         username = request.POST.get('username')
         password = request.POST.get('password')
-
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             messages.success(request, f"Welcome {username}! You are now logged in.")
-            return redirect('profile') #Redirects to the profile page
+            return redirect('profile')  # Redirects to the profile page
         else:
             messages.error(request, 'Invalid Username or Password')
-    return render(request, 'users/login.html')
+
+    return render(request, 'users/login.html', {'form': form})  # Pass form to template
 
 def logout_view(request):
     logout(request) #Ends user session
