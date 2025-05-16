@@ -57,21 +57,23 @@ def profile_view(request):
 
 @login_required
 def edit_profile(request):
-    # Get or create the user's profile to avoid AttributeError
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    # Get or create the user's profile
+    profile = request.user.userprofile
+
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)  # Use UserProfile instance
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
 
         if form.is_valid():
-            form.save()  # Save the UserProfile data
+            form.save()  # Save profile data including profile picture
             messages.success(request, 'Your profile has been updated!')
-            return redirect('profile')  # Redirect to the profile page after update
+            return redirect('profile')  # Redirect to profile page after update
 
     else:
-        form = ProfileForm(instance=profile)  # Load profile data into the form
+        form = ProfileForm(instance=profile)
 
     return render(request, 'users/edit_profile.html', {'form': form, 'profile': profile})
+
 
 
 @login_required
@@ -112,7 +114,8 @@ def verify_otp(request):
 def enable_2fa(request):
     user = request.user
 
-    profile, created = UserProfile.objects.get_or_create(user=user)
+    profile  = request.user.userprofile
+
     
     if not profile.otp_secret:
         profile.otp_secret = pyotp.random_base32()

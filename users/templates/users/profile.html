@@ -19,7 +19,12 @@
                 <h3>Welcome, {{ user.username }}</h3>
             </div>
             <div class="card-body">
-                <img src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'images/default_profile_picture.png' %}{% endif %}" alt="Profile Picture" class="profile-img">
+               
+                <!-- Profile page template -->
+                <img src="{{ user.userprofile.profile_pictures.url }}" alt="Profile Picture" class="profile-img">
+
+
+           
 
                 <h5 class="card-title mt-2">{{ user.userprofile.name }}</h5>
                 <p class="text-muted">@{{ user.username }}</p>

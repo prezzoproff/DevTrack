@@ -6,10 +6,10 @@ from .models import UserProfile
 @receiver(post_save, sender = User)
 def create_user_profile(sender, instance, created, **kwargs):
     '''Automatically creates a Userprofile when a new user is registered.'''
-    if created:
-        UserProfile.objects.create(user = instance)
+    if created and not hasattr(instance, 'userprofile'):
+        UserProfile.objects.create(user=instance)
     
 @receiver(post_save, sender = User)
 def save_user_profile(sender, instance, **kwargs):
     ''''Automatically saves the userprofile when the user instance is updated.'''
-    instance.userprofile.save()
+    UserProfile.objects.get_or_create(user=instance)

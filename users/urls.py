@@ -4,6 +4,8 @@ from .views import edit_profile, send_otp, verify_otp
 from .views import enable_2fa
 
 
+
+
 urlpatterns = [
         path('register/', views.register, name = 'register'),
         path('login/', views.login_view, name = 'login'),
