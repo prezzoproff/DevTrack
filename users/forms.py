@@ -25,3 +25,10 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['profile_picture', 'bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tell us about yourself...',
+                'rows': 4,
+            }),
+        }

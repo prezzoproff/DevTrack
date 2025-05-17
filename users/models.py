@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+import pyotp
 
 # Create your models here.
 
@@ -16,7 +17,22 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add = True) #Automatically stores registration date
     two_factor_secret = models.CharField(max_length=32, blank=True, null=True)
     otp_secret = models.CharField(max_length=32, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', default='profile_pics/default.jpg', null=True, blank=True)
+
+
+
+    @property
+    def is_2fa_enabled(self):
+        return bool(self.otp_secret)
+
+
+    def get_totp_uri(self):
+        return pyotp.totp.TOTP(self.otp_secret).provisioning_uri(
+            self.user.username, issuer_name="My Django App"
+        )
+
+    def verify_token(self, token):
+        return pyotp.TOTP(self.otp_secret).verify(token)
 
 
     def __str__(self):

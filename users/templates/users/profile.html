@@ -21,8 +21,15 @@
             <div class="card-body">
                
                 <!-- Profile page template -->
-                <img src="{{ user.userprofile.profile_pictures.url }}" alt="Profile Picture" class="profile-img">
-
+                <div class="profile-header">
+                    <!-- Profile Picture -->
+                    <div class="profile-picture">
+                        {% if user.userprofile.profile_picture %}
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail" width="150" height="150">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" alt="Default Profile Picture" class="img-thumbnail" width="150" height="150">
+                        {% endif %}
+                    </div>
 
            
 
@@ -49,6 +56,17 @@
                 <h4>Security Settings</h4>
             </div>
             <div class="card-body text-center">
+
+                <h3>Two-Factor Authentication (2FA)</h3>
+
+                {% if user.userprofile.is_2fa_enabled %}
+                    <p style="color: green;">✅ 2FA is enabled for your account.</p>
+                {% else %}
+                    <p style="color: red;">❌ 2FA is not enabled.</p>
+                    <a href="{% url 'enable_2fa' %}" class="btn btn-sm btn-primary">Enable 2FA Now</a>
+                {% endif %}
+
+
                 <p><strong>Two-Factor Authentication (2FA):</strong></p>
                 {% if user.userprofile.two_factor_enabled %}
                     <p class="text-success">✅ Enabled</p>

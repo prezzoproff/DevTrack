@@ -130,6 +130,15 @@ def enable_2fa(request):
     qr.save(qr_io, format="PNG")
     qr_base64 = base64.b64encode(qr_io.getvalue()).decode()
 
+
+    if request.method == "POST":
+        otp = request.POST.get("otp")
+        if profile.verify_token(otp):
+            messages.success(request, "2FA has been enabled successfully.")
+            return redirect("dashboard")
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+
     return render(request, "users/enable_2fa.html", {"qr_base64": qr_base64})
 
 
