@@ -17,6 +17,8 @@ from io import BytesIO
 import base64
 import io
 from .forms import ProfileForm
+from issues.models import Issues 
+from django.shortcuts import render
 
 
 
@@ -134,12 +136,40 @@ def enable_2fa(request):
     if request.method == "POST":
         otp = request.POST.get("otp")
         if profile.verify_token(otp):
+            profile.two_factor_enabled = True 
+            profile.save()
             messages.success(request, "2FA has been enabled successfully.")
             return redirect("dashboard")
         else:
             messages.error(request, "Invalid OTP. Please try again.")
 
     return render(request, "users/enable_2fa.html", {"qr_base64": qr_base64})
+
+
+
+
+@login_required
+def dashboard(request):
+    user = request.user
+    issues = Issues.objects.filter(reporter=user)
+    profile = user.userprofile  # Get user profile for 2FA
+
+    return render(request, 'users/dashboard.html', {
+        'issues': issues,
+        'profile': profile,
+        'two_factor_status': profile.two_factor_enabled
+    })
+
+
+@login_required
+def disable_2fa(request):
+    profile = request.user.userprofile
+    profile.two_factor_enabled = False
+    profile.otp_secret = ''
+    profile.save()
+    messages.success(request, "2FA has been disabled.")
+    return redirect('profile')
+
 
 
 

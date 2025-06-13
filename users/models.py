@@ -18,12 +18,11 @@ class UserProfile(models.Model):
     two_factor_secret = models.CharField(max_length=32, blank=True, null=True)
     otp_secret = models.CharField(max_length=32, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', default='profile_pics/default.jpg', null=True, blank=True)
+    two_factor_enabled = models.BooleanField(default=False)
 
 
 
-    @property
-    def is_2fa_enabled(self):
-        return bool(self.otp_secret)
+    
 
 
     def get_totp_uri(self):
@@ -32,7 +31,10 @@ class UserProfile(models.Model):
         )
 
     def verify_token(self, token):
-        return pyotp.TOTP(self.otp_secret).verify(token)
+        if not self.otp_secret:
+            return False
+        totp = pyotp.TOTP(self.otp_secret)
+        return totp.verify(token)
 
 
     def __str__(self):

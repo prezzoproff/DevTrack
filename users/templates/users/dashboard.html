@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <h2>Welcome, {{ user.username }}!</h2>
+
+  <p>Email: {{ user.email }}</p>
+
+  <h3>Your Recent Issues</h3>
+  <ul>
+    {% for issue in issues %}
+      <li><strong>{{ issue.title }}</strong> - {{ issue.status }}</li>
+    {% empty %}
+      <li>You haven’t reported any issues yet.</li>
+    {% endfor %}
+  </ul>
+{% if two_factor_status %}
+    <p>✅ Two-Factor Authentication is ENABLED</p>
+{% else %}
+    <p>❌ Two-Factor Authentication is NOT enabled</p>
+{% endif %}
+
+
+  <nav>
+    <a href="{% url 'issuespage' %}">📋 View All Issues</a> |
+    <a href="{% url 'edit_profile' %}">🧑 Edit Profile</a> |
+    <a href="{% url 'logout' %}">🚪 Logout</a>
+  </nav>
+{% endblock %}

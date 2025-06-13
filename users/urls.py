@@ -6,6 +6,7 @@ from .views import enable_2fa
 
 
 
+
 urlpatterns = [
         path('register/', views.register, name = 'register'),
         path('login/', views.login_view, name = 'login'),
@@ -15,4 +16,6 @@ urlpatterns = [
         path("send-otp/", send_otp, name="send_otp"),
         path("verify-otp/", verify_otp, name="verify_otp"),
         path('enable-2fa/', enable_2fa, name='enable_2fa'),
+        path('dashboard/', views.dashboard, name='dashboard'),
+        path('disable-2fa/', views.disable_2fa, name='disable_2fa'),
 ]

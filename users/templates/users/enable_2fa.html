@@ -2,14 +2,12 @@
 
 {% block content %}
 <!-- templates/users/enable_2fa.html -->
-<h2>Scan this QR code with Google Authenticator</h2>
-<img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code">
-<p>After scanning, you'll receive a 6-digit code in your app. Enter it to verify:</p>
-
-<form method="POST">
+<form method="post">
     {% csrf_token %}
-    <input type="text" name="otp" placeholder="Enter 6-digit code" required>
+    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code" width="300">
+    <input type="text" name="otp" placeholder="Enter OTP">
     <button type="submit">Verify</button>
 </form>
+
 
 {% endblock %}
