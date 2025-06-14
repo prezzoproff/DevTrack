@@ -1,0 +1,60 @@
+/* static/css/2fa.css */
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.qr-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.qr-container h2 {
+  color: #3f51b5;
+  margin-bottom: 20px;
+}
+
+.qr-container img {
+  width: 200px;
+  height: 200px;
+  margin: 20px 0;
+  border: 4px solid #3f51b5;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.qr-container form {
+  margin-top: 20px;
+}
+
+.qr-container input[type="text"] {
+  padding: 10px;
+  width: 80%;
+  border: 2px solid #90caf9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.qr-container button {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.qr-container button:hover {
+  background-color: #303f9f;
+}
